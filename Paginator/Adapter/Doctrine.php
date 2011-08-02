@@ -6,10 +6,7 @@ use Knp\Bundle\PaginatorBundle\Paginator\Adapter,
     Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\EventDispatcher,
     Knp\Bundle\PaginatorBundle\Event\CountEvent,
-    Knp\Bundle\PaginatorBundle\Event\ItemsEvent,
-    Knp\Bundle\PaginatorBundle\Exception\InvalidArgumentException,
-    Knp\Bundle\PaginatorBundle\Exception\RuntimeException,
-    Knp\Bundle\PaginatorBundle\Exception\UnexpectedValueException;
+    Knp\Bundle\PaginatorBundle\Event\ItemsEvent;
 
 /**
  * Doctrine Paginator Adapter.
@@ -155,7 +152,7 @@ class Doctrine implements Adapter
                 break;
 
             default:
-                throw new InvalidArgumentException("The query supplied must be ORM or ODM Query object, [" . get_class($query) . "] given");
+                throw new \InvalidArgumentException("The query supplied must be ORM or ODM Query object, [" . get_class($query) . "] given");
         }
 
         if ($this->usedType != $type) {
@@ -181,13 +178,13 @@ class Doctrine implements Adapter
     {
         if (is_null($this->rowCount)) {
             if ($this->query === null) {
-                throw new UnexpectedValueException('Paginator Query must be supplied at this point');
+                throw new \UnexpectedValueException('Paginator Query must be supplied at this point');
             }
 
             $event = new CountEvent($this->query, $this->distinct, $this->getAlias());
             $this->eventDispatcher->dispatch(CountEvent::NAME, $event);
             if (!$event->isPropagationStopped()) {
-                throw new RuntimeException('Some listener must process an event during the "count" method call');
+                throw new \RuntimeException('Some listener must process an event during the "count" method call');
             }
             $this->rowCount = $event->getCount();
         }
@@ -206,13 +203,13 @@ class Doctrine implements Adapter
     public function getItems($offset, $itemCountPerPage)
     {
         if ($this->query === null) {
-            throw new UnexpectedValueException('Paginator Query must be supplied at this point');
+            throw new \UnexpectedValueException('Paginator Query must be supplied at this point');
         }
 
         $event = new ItemsEvent($this->query, $this->distinct, $offset, $itemCountPerPage, $this->getAlias());
         $this->eventDispatcher->dispatch(ItemsEvent::NAME, $event);
         if (!$event->isPropagationStopped()) {
-             throw new RuntimeException('Some listener must process an event during the "getItems" method call');
+             throw new \RuntimeException('Some listener must process an event during the "getItems" method call');
         }
 
         return $event->getItems();

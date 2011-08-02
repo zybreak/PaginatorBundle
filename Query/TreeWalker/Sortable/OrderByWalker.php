@@ -6,8 +6,7 @@ use Doctrine\ORM\Query\TreeWalkerAdapter,
     Doctrine\ORM\Query\AST\SelectStatement,
     Doctrine\ORM\Query\AST\PathExpression,
     Doctrine\ORM\Query\AST\OrderByItem,
-    Doctrine\ORM\Query\AST\OrderByClause,
-    Knp\Bundle\PaginatorBundle\Exception\UnexpectedValueException;
+    Doctrine\ORM\Query\AST\OrderByClause;
 
 /**
  * OrderBy Query TreeWalker for Sortable functionality
@@ -45,11 +44,11 @@ class OrderByWalker extends TreeWalkerAdapter
 
         $components = $this->_getQueryComponents();
         if (!array_key_exists($alias, $components)) {
-            throw new UnexpectedValueException("There is no component aliased by [{$alias}] in the given Query");
+            throw new \UnexpectedValueException("There is no component aliased by [{$alias}] in the given Query");
         }
         $meta = $components[$alias];
         if (!$meta['metadata']->hasField($field)) {
-            throw new UnexpectedValueException("There is no such field [{$field}] in the given Query component, aliased by [$alias]");
+            throw new \UnexpectedValueException("There is no such field [{$field}] in the given Query component, aliased by [$alias]");
         }
 
         $direction = $query->getHint(self::HINT_PAGINATOR_SORT_DIRECTION);

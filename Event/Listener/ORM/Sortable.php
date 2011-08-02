@@ -6,8 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface,
     Knp\Bundle\PaginatorBundle\Event\ItemsEvent,
     Knp\Bundle\PaginatorBundle\Query\Helper as QueryHelper,
     Knp\Bundle\PaginatorBundle\Query\TreeWalker\Sortable\OrderByWalker,
-    Symfony\Component\HttpFoundation\Request,
-    Knp\Bundle\PaginatorBundle\Exception\UnexpectedValueException;
+    Symfony\Component\HttpFoundation\Request;
 
 /**
  * ORM Sortable listener is responsible
@@ -52,7 +51,7 @@ class Sortable implements EventSubscriberInterface
             $query = $event->getQuery();
             $parts = explode('.', $params[$event->getAlias().'sort']);
             if (count($parts) != 2) {
-                throw new UnexpectedValueException('Invalid sort key came by request, should be example: "article.title"');
+                throw new \UnexpectedValueException('Invalid sort key came by request, should be example: "article.title"');
             }
 
             $query->setHint(OrderByWalker::HINT_PAGINATOR_SORT_ALIAS, current($parts))

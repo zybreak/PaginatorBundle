@@ -5,8 +5,7 @@ namespace Knp\Bundle\PaginatorBundle\Event\Listener\ODM;
 use Knp\Bundle\PaginatorBundle\Event\CountEvent,
     Knp\Bundle\PaginatorBundle\Event\ItemsEvent,
     Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Doctrine\ODM\MongoDB\Query\Query,
-    Knp\Bundle\PaginatorBundle\Exception\UnexpectedValueException;
+    Doctrine\ODM\MongoDB\Query\Query;
 
 /**
  * ODM Paginate listener is responsible
@@ -37,7 +36,7 @@ class Paginate implements EventSubscriberInterface
         $query = $event->getQuery();
         $type = $query->getType();
         if ($type !== Query::TYPE_FIND) {
-            throw new UnexpectedValueException('ODM query must be a FIND type query');
+            throw new \UnexpectedValueException('ODM query must be a FIND type query');
         }
         $reflClass = new \ReflectionClass('Doctrine\MongoDB\Query\Query');
         $reflProp = $reflClass->getProperty('query');
