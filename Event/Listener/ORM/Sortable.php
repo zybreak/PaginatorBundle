@@ -1,11 +1,11 @@
 <?php
 
-namespace Knp\Bundle\PaginatorBundle\Event\Listener\ORM;
+namespace Knp\PaginatorBundle\Event\Listener\ORM;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Knp\Bundle\PaginatorBundle\Event\ItemsEvent,
-    Knp\Bundle\PaginatorBundle\Query\Helper as QueryHelper,
-    Knp\Bundle\PaginatorBundle\Query\TreeWalker\Sortable\OrderByWalker,
+    Knp\PaginatorBundle\Event\ItemsEvent,
+    Knp\PaginatorBundle\Query\Helper as QueryHelper,
+    Knp\PaginatorBundle\Query\TreeWalker\Sortable\OrderByWalker,
     Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -18,7 +18,7 @@ class Sortable implements EventSubscriberInterface
     /**
      * AST Tree Walker for sorting operation
      */
-    const TREE_WALKER_ORDER_BY = 'Knp\Bundle\PaginatorBundle\Query\TreeWalker\Sortable\OrderByWalker';
+    const TREE_WALKER_ORDER_BY = 'Knp\PaginatorBundle\Query\TreeWalker\Sortable\OrderByWalker';
 
     /**
      * Current request

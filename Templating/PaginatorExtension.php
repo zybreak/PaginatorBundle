@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\Bundle\PaginatorBundle\Templating;
+namespace Knp\PaginatorBundle\Templating;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Zend\Paginator\Paginator;

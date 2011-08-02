@@ -1,13 +1,13 @@
 <?php
 
-namespace Knp\Bundle\PaginatorBundle\Event\Listener\ORM;
+namespace Knp\PaginatorBundle\Event\Listener\ORM;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface,
-    Knp\Bundle\PaginatorBundle\Event\CountEvent,
-    Knp\Bundle\PaginatorBundle\Event\ItemsEvent,
-    Knp\Bundle\PaginatorBundle\Query\Helper as QueryHelper,
-    Knp\Bundle\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker,
-    Knp\Bundle\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker,
+    Knp\PaginatorBundle\Event\CountEvent,
+    Knp\PaginatorBundle\Event\ItemsEvent,
+    Knp\PaginatorBundle\Query\Helper as QueryHelper,
+    Knp\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker,
+    Knp\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker,
     Doctrine\ORM\Query;
 
 /**
@@ -19,17 +19,17 @@ class Paginate implements EventSubscriberInterface
     /**
      * AST Tree Walker for count operation
      */
-    const TREE_WALKER_COUNT = 'Knp\Bundle\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker';
+    const TREE_WALKER_COUNT = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker';
 
     /**
      * AST Tree Walker for primary key retrieval in case of distinct mode
      */
-    const TREE_WALKER_LIMIT_SUBQUERY = 'Knp\Bundle\PaginatorBundle\Query\TreeWalker\Paginate\LimitSubqueryWalker';
+    const TREE_WALKER_LIMIT_SUBQUERY = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\LimitSubqueryWalker';
 
     /**
      * AST Tree Walker for loading the resultset by primary keys in case of distinct mode
      */
-    const TREE_WALKER_WHERE_IN = 'Knp\Bundle\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker';
+    const TREE_WALKER_WHERE_IN = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker';
 
     /**
      * Executes the count on Query used for

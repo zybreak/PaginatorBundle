@@ -7,11 +7,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Knp\Bundle\PaginatorBundle;
+namespace Knp\PaginatorBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Knp\Bundle\PaginatorBundle\DependencyInjection\Compiler\PaginatorConfigurationPass;
+use Knp\PaginatorBundle\DependencyInjection\Compiler\PaginatorConfigurationPass;
 
 class KnpPaginatorBundle extends Bundle
 {

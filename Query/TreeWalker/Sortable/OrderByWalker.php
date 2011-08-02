@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\Bundle\PaginatorBundle\Query\TreeWalker\Sortable;
+namespace Knp\PaginatorBundle\Query\TreeWalker\Sortable;
 
 use Doctrine\ORM\Query\TreeWalkerAdapter,
     Doctrine\ORM\Query\AST\SelectStatement,

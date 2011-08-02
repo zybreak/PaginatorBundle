@@ -1,28 +1,23 @@
 <?php
 
-namespace Knp\Bundle\PaginatorBundle\Paginator\Adapter;
+namespace Knp\PaginatorBundle\Paginator;
 
-use Knp\Bundle\PaginatorBundle\Paginator\Adapter,
-    Symfony\Component\DependencyInjection\ContainerInterface,
+use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\EventDispatcher\EventDispatcher,
-    Knp\Bundle\PaginatorBundle\Event\CountEvent,
-    Knp\Bundle\PaginatorBundle\Event\ItemsEvent;
+    Knp\PaginatorBundle\Event\CountEvent,
+    Knp\PaginatorBundle\Event\ItemsEvent,
+    Zend\Paginator\Adapter as ZendPaginatorAdapter;
 
 /**
  * Doctrine Paginator Adapter.
  * Customized for the event based extendability.
  */
-class Doctrine implements Adapter
+class DoctrineAdapter extends ZendPaginatorAdapter
 {
     /**
      * ORM query class
      */
     const QUERY_CLASS_ORM = 'Doctrine\ORM\Query';
-
-    /**
-     * ODM query class
-     */
-    const QUERY_CLASS_ODM = 'Doctrine\ODM\MongoDB\Query\Query';
 
     /**
      * List of listener services type => serviceIds
@@ -33,13 +28,6 @@ class Doctrine implements Adapter
 	 * @var array
      */
     protected $listenerServices = array();
-
-    /**
-     * Currently used type
-     *
-     * @var string
-     */
-    protected $usedType = null;
 
     /**
      * Query object for pagination query
@@ -99,7 +87,7 @@ class Doctrine implements Adapter
      * Set the distinct mode
      *
      * @param bool $distinct
-     * @return Knp\Bundle\PaginatorBundle\Paginator\Adapter\Doctrine
+     * @return Knp\PaginatorBundle\Paginator\Adapter\Doctrine
      */
     public function setDistinct($distinct)
     {
@@ -113,7 +101,7 @@ class Doctrine implements Adapter
      * request parameters will be aliased by it
      *
      * @param string $alias
-     * @return Knp\Bundle\PaginatorBundle\Paginator\Adapter\Doctrine
+     * @return Knp\PaginatorBundle\Paginator\Adapter\Doctrine
      */
     public function setAlias($alias)
     {
@@ -137,31 +125,10 @@ class Doctrine implements Adapter
      * @param Query $query - The query to paginate
      * @param integer $numRows(optional) - number of rows
      * @throws InvalidArgumentException - if query type is not supported
-     * @return Knp\Bundle\PaginatorBundle\Paginator\Adapter\Doctrine
+     * @return Knp\PaginatorBundle\Paginator\Adapter\Doctrine
      */
     public function setQuery($query, $numRows = null)
     {
-        $type = null;
-        switch (get_class($query)) {
-            case self::QUERY_CLASS_ORM:
-                $type = 'orm';
-                break;
-
-            case self::QUERY_CLASS_ODM:
-                $type = 'odm';
-                break;
-
-            default:
-                throw new \InvalidArgumentException("The query supplied must be ORM or ODM Query object, [" . get_class($query) . "] given");
-        }
-
-        if ($this->usedType != $type) {
-            $this->eventDispatcher = new EventDispatcher();
-            foreach ($this->listenerServices[$type] as $options) {
-                $this->eventDispatcher->addSubscriber($this->container->get($options['service']), $options['priority']);
-            }
-            $this->usedType = $type;
-        }
         $this->query = $query;
         $this->rowCount = is_null($numRows) ? null : intval($numRows);
 

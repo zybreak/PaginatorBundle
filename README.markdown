@@ -55,7 +55,7 @@ Submodule the bundle
     {
         return array(
             // ...
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Knp\PaginatorBundle\KnpPaginatorBundle(),
             // ...
         );
     }

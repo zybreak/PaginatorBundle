@@ -11,7 +11,7 @@
  * to kontakt@beberlei.de so I can send you a copy immediately.
  */
 
-namespace Knp\Bundle\PaginatorBundle\Query\TreeWalker\Paginate;
+namespace Knp\PaginatorBundle\Query\TreeWalker\Paginate;
 
 use Doctrine\ORM\Query\TreeWalkerAdapter,
     Doctrine\ORM\Query\AST\SelectStatement,
