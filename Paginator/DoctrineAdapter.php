@@ -3,31 +3,33 @@
 namespace Knp\PaginatorBundle\Paginator;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\EventDispatcher\EventDispatcher,
-    Knp\PaginatorBundle\Event\CountEvent,
-    Knp\PaginatorBundle\Event\ItemsEvent,
+    Knp\PaginatorBundle\Query\Helper as QueryHelper,
+    Knp\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker,
+    Knp\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker,
+    Doctrine\ORM\Query,
     Zend\Paginator\Adapter as ZendPaginatorAdapter;
 
 /**
  * Doctrine Paginator Adapter.
  * Customized for the event based extendability.
  */
-class DoctrineAdapter extends ZendPaginatorAdapter
+class DoctrineAdapter implements ZendPaginatorAdapter
 {
+    
     /**
-     * ORM query class
+     * AST Tree Walker for count operation
      */
-    const QUERY_CLASS_ORM = 'Doctrine\ORM\Query';
+    const TREE_WALKER_COUNT = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker';
 
     /**
-     * List of listener services type => serviceIds
-     * types supported:
-     *      orm - doctrine orm
-     *      odm - ducument manager
-     *
-	 * @var array
+     * AST Tree Walker for primary key retrieval in case of distinct mode
      */
-    protected $listenerServices = array();
+    const TREE_WALKER_LIMIT_SUBQUERY = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\LimitSubqueryWalker';
+
+    /**
+     * AST Tree Walker for loading the resultset by primary keys in case of distinct mode
+     */
+    const TREE_WALKER_WHERE_IN = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker';
 
     /**
      * Query object for pagination query
@@ -37,18 +39,11 @@ class DoctrineAdapter extends ZendPaginatorAdapter
     protected $query = null;
 
     /**
-     * EventDispacher
-     *
-     * @var Symfony\Component\EventDispatcher\EventDispatcher
-     */
-    protected $eventDispatcher = null;
-
-    /**
      * True to paginate in distinct mode
      *
      * @var boolean
      */
-    protected $distinct = true;
+    protected $distinct = false;
 
     /**
      * Total item count
@@ -148,12 +143,17 @@ class DoctrineAdapter extends ZendPaginatorAdapter
                 throw new \UnexpectedValueException('Paginator Query must be supplied at this point');
             }
 
-            $event = new CountEvent($this->query, $this->distinct, $this->getAlias());
-            $this->eventDispatcher->dispatch(CountEvent::NAME, $event);
-            if (!$event->isPropagationStopped()) {
-                throw new \RuntimeException('Some listener must process an event during the "count" method call');
-            }
-            $this->rowCount = $event->getCount();
+            $countQuery = QueryHelper::cloneQuery($this->query);
+            $countQuery->setParameters($this->query->getParameters());
+            QueryHelper::addCustomTreeWalker($countQuery, self::TREE_WALKER_COUNT);
+            $countQuery->setHint(
+                CountWalker::HINT_PAGINATOR_COUNT_DISTINCT,
+                $this->distinct
+            );
+            $countQuery->setFirstResult(null)
+                ->setMaxResults(null);
+            $countResult = $countQuery->getResult(Query::HYDRATE_ARRAY);
+            $this->rowCount = count($countResult) > 1 ? count($countResult) : current(current($countResult));
         }
 
         return $this->rowCount;
@@ -173,21 +173,53 @@ class DoctrineAdapter extends ZendPaginatorAdapter
             throw new \UnexpectedValueException('Paginator Query must be supplied at this point');
         }
 
-        $event = new ItemsEvent($this->query, $this->distinct, $offset, $itemCountPerPage, $this->getAlias());
-        $this->eventDispatcher->dispatch(ItemsEvent::NAME, $event);
-        if (!$event->isPropagationStopped()) {
-             throw new \RuntimeException('Some listener must process an event during the "getItems" method call');
+        $query = $this->query;
+        $distinct = $this->distinct;
+        $result = null;
+        if ($distinct) {
+            $limitSubQuery = QueryHelper::cloneQuery($query);
+            $limitSubQuery->setParameters($query->getParameters());
+            QueryHelper::addCustomTreeWalker($limitSubQuery, self::TREE_WALKER_LIMIT_SUBQUERY);
+
+            $limitSubQuery->setFirstResult($offset)
+                ->setMaxResults($itemCountPerPage);
+            $ids = array_map('current', $limitSubQuery->getScalarResult());
+            // create where-in query
+            
+            die(print_r($ids, true));
+            $whereInQuery = QueryHelper::cloneQuery($query);
+            QueryHelper::addCustomTreeWalker($whereInQuery, self::TREE_WALKER_WHERE_IN);
+            $whereInQuery->setHint(WhereInWalker::HINT_PAGINATOR_ID_COUNT, count($ids))
+                ->setFirstResult(null)
+                ->setMaxResults(null);
+
+            foreach ($ids as $i => $id) {
+                $whereInQuery->setParameter(WhereInWalker::PAGINATOR_ID_ALIAS . '_' . ++$i, $id);
+            }
+            $result = $whereInQuery->getResult();
+        } else {
+            $query->setFirstResult($offset)
+                ->setMaxResults($itemCountPerPage);
+            $result = $query->getResult();
+        }
+        return $result;
+    }
+    
+    public function setWhereIn($ids)
+    {
+        if ($this->query === null) {
+            throw new \UnexpectedValueException('Paginator Query must be supplied at this point');
+        }
+        
+        $whereInQuery = QueryHelper::cloneQuery($this->query);
+        QueryHelper::addCustomTreeWalker($whereInQuery, self::TREE_WALKER_WHERE_IN);
+        $whereInQuery->setHint(WhereInWalker::HINT_PAGINATOR_ID_COUNT, count($ids));
+
+        foreach ($ids as $i => $id) {
+            $whereInQuery->setParameter(WhereInWalker::PAGINATOR_ID_ALIAS . '_' . ++$i, $id);
         }
 
-        return $event->getItems();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addListenerService($serviceId, $type, $priority)
-    {
-        $this->listenerServices[$type][] = array('service' => $serviceId, 'priority' => $priority);
+        $this->query = $whereInQuery;
     }
 
     /**

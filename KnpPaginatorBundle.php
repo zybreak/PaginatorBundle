@@ -15,12 +15,5 @@ use Knp\PaginatorBundle\DependencyInjection\Compiler\PaginatorConfigurationPass;
 
 class KnpPaginatorBundle extends Bundle
 {
-	/**
-     * {@inheritdoc}
-     */
-    public function build(ContainerBuilder $container)
-    {
-        parent::build($container);
-        $container->addCompilerPass(new PaginatorConfigurationPass());
-    }
+
 }

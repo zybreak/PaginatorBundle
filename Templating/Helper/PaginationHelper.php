@@ -68,7 +68,7 @@ class PaginationHelper extends Helper
      *
      * @var string
      */
-    private $template;
+    private $template = 'KnpPaginatorBundle:Pagination:sliding.html.twig';
 
     /**
      * Initialize pagination helper
@@ -193,6 +193,8 @@ class PaginationHelper extends Helper
         }
 
         $params = get_object_vars($paginator->getPages($this->scrollingStyle));
+        var_dump($params);
+        exit();
         $params['route'] = $route;
         $params['alias'] = $this->getAlias($paginator);
         $params['query'] = array_merge($this->params, $routeparams);

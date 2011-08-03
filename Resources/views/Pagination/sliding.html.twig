@@ -1,7 +1,7 @@
 {# default Sliding pagination control implementation #}
 
 {% if pageCount > 1 %}
-<div class="pagination">
+<div class="pager">
 	{% if first is defined and current != first %}
         <span class="first">
         	<a href="{{ path(route, query|merge({'page': first})) }}">&lt;&lt;</a>
@@ -20,7 +20,7 @@
             	<a href="{{ path(route, query|merge({'page': page})) }}">{{ page }}</a>
             </span>
         {% else %}
-            <span class="current">{{ page }}</span>
+            <span class="current"><a href="{{ path(route, query|merge({'page': page})) }}">{{ page }}</a></span>
         {% endif %}
 
     {% endfor %}
