@@ -10,10 +10,7 @@
 namespace Knp\PaginatorBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Knp\PaginatorBundle\DependencyInjection\Compiler\PaginatorConfigurationPass;
 
 class KnpPaginatorBundle extends Bundle
 {
-
 }
