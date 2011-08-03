@@ -133,16 +133,6 @@ class Paginator implements \Countable, \IteratorAggregate
     }
 
     /**
-     * Serializes the object as a string.  Proxies to {@link render()}.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->render();
-    }
-
-    /**
      * Returns the number of pages.
      *
      * @return integer
@@ -471,17 +461,6 @@ class Paginator implements \Countable, \IteratorAggregate
         }
 
         return $pageNumber;
-    }
-
-    /**
-     * Renders the paginator.
-     *
-     * @param  \Zend\View\Renderer $view
-     * @return string
-     */
-    public function render()
-    {
-        die('TODO');
     }
 
     /**
