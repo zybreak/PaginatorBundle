@@ -3,7 +3,7 @@
 namespace Knp\PaginatorBundle\Templating;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Zend\Paginator\Paginator;
+use Knp\PaginatorBundle\Paginator\Paginator;
 
 class PaginatorExtension extends \Twig_Extension
 {

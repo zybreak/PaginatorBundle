@@ -1,19 +1,19 @@
 <?php
 
-namespace Knp\PaginatorBundle\Paginator;
+namespace Knp\PaginatorBundle\Paginator\Adapter;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Knp\PaginatorBundle\Query\Helper as QueryHelper,
     Knp\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker,
     Knp\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker,
     Doctrine\ORM\Query,
-    Zend\Paginator\Adapter as ZendPaginatorAdapter;
+    \Knp\PaginatorBundle\Paginator\Adapter;
 
 /**
  * Doctrine Paginator Adapter.
  * Customized for the event based extendability.
  */
-class DoctrineAdapter implements ZendPaginatorAdapter
+class Doctrine implements Adapter
 {
     
     /**

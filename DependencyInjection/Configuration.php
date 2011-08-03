@@ -20,7 +20,6 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('templating')
                     ->children()
-                        ->scalarNode('style')->defaultValue('Sliding')->end()
                         ->scalarNode('template')->defaultValue('KnpPaginatorBundle:Pagination:sliding.html.twig')->end()
                     ->end()
                 ->end()

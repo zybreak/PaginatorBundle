@@ -5,10 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="knp_paginator.adapter.class">Knp\PaginatorBundle\Paginator\DoctrineAdapter</parameter>
-
-        <parameter key="knp_paginator.event.listener.orm.sortable.class">Knp\PaginatorBundle\Event\Listener\ORM\Sortable</parameter>
-        <parameter key="knp_paginator.event.listener.orm.paginate.class">Knp\PaginatorBundle\Event\Listener\ORM\Paginate</parameter>
+        <parameter key="knp_paginator.adapter.class">Knp\PaginatorBundle\Paginator\Adapter\Doctrine</parameter>
     </parameters>
 
     <services>

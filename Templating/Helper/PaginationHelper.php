@@ -6,8 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Templating\Helper\RouterHelper;
 use Symfony\Component\Templating\Helper\Helper;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Zend\Paginator\Paginator;
-use Knp\PaginatorBundle\Paginator\Adapter;
+use Knp\PaginatorBundle\Paginator\Paginator;
+use Knp\PaginatorBundle\Paginator\Doctrine as Adapter;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -54,14 +54,6 @@ class PaginationHelper extends Helper
      * @var array
      */
     private $params;
-
-    /**
-     * Scrolling style for Zend paginator
-     * to create related pagination control
-     *
-     * @var string
-     */
-    private $scrollingStyle;
 
     /**
      * Pagination control template
@@ -192,9 +184,7 @@ class PaginationHelper extends Helper
             $route = $this->route;
         }
 
-        $params = get_object_vars($paginator->getPages($this->scrollingStyle));
-        var_dump($params);
-        exit();
+        $params = get_object_vars($paginator->getPages(new \Knp\PaginatorBundle\Paginator\ScrollingStyle\Sliding()));
         $params['route'] = $route;
         $params['alias'] = $this->getAlias($paginator);
         $params['query'] = array_merge($this->params, $routeparams);
