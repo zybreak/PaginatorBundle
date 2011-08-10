@@ -129,6 +129,11 @@ class Doctrine implements Adapter
 
         return $this;
     }
+    
+    public function getQuery()
+    {
+        return $this->query;
+    }
 
     /**
      * Executes count on supplied query
