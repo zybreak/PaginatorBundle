@@ -10,7 +10,6 @@ based on Zend Paginator.
 
 ## Features:
 
-- Single adapter for Zend paginator, which can be used as ORM or query paginator, using DIC
 - View helper for simplified pagination templates.
 - Supports multiple paginators during one request
 
