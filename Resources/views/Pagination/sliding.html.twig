@@ -1,16 +1,16 @@
-{# default Sliding pagination control implementation #}
+    {# default Sliding pagination control implementation #}
 
 {% if pageCount > 1 %}
 <div class="pager">
 	{% if first is defined and current != first %}
         <span class="first">
-        	<a href="{{ path(route, query|merge({'page': first})) }}">&lt;&lt;</a>
+            <a href="{{ path(route, query|merge({'page': first})) }}">&laquo;</a>
         </span>
     {% endif %}
 
     {% if previous is defined %}
         <span class="previous">
-        	<a href="{{ path(route, query|merge({'page': previous})) }}">&lt;</a>
+            <a href="{{ path(route, query|merge({'page': previous})) }}">&lsaquo;</a>
         </span>
     {% endif %}
 
@@ -27,13 +27,13 @@
 
     {% if next is defined %}
         <span class="next">
-        	<a href="{{ path(route, query|merge({'page': next})) }}">&gt;</a>
+        	<a href="{{ path(route, query|merge({'page': next})) }}">&rsaquo;</a>
         </span>
     {% endif %}
 
     {% if last is defined and current != last %}
         <span class="last">
-        	<a href="{{ path(route, query|merge({'page': last})) }}">&gt;&gt;</a>
+            <a href="{{ path(route, query|merge({'page': last})) }}">&raquo;</a>
         </span>
     {% endif %}
 </div>
