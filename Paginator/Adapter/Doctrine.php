@@ -1,13 +1,13 @@
 <?php
 
-namespace Knp\PaginatorBundle\Paginator\Adapter;
+namespace Zybreak\PaginatorBundle\Paginator\Adapter;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
-    Knp\PaginatorBundle\Query\Helper as QueryHelper,
-    Knp\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker,
-    Knp\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker,
-    Doctrine\ORM\Query,
-    \Knp\PaginatorBundle\Paginator\Adapter;
+    Zybreak\PaginatorBundle\Query\Helper as QueryHelper,
+    Zybreak\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker,
+    Zybreak\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker,
+    Zybreak\PaginatorBundle\Paginator\Adapter,
+    Doctrine\ORM\Query;
 
 /**
  * Doctrine Paginator Adapter.
@@ -19,17 +19,17 @@ class Doctrine implements Adapter
     /**
      * AST Tree Walker for count operation
      */
-    const TREE_WALKER_COUNT = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker';
+    const TREE_WALKER_COUNT = 'Zybreak\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker';
 
     /**
      * AST Tree Walker for primary key retrieval in case of distinct mode
      */
-    const TREE_WALKER_LIMIT_SUBQUERY = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\LimitSubqueryWalker';
+    const TREE_WALKER_LIMIT_SUBQUERY = 'Zybreak\PaginatorBundle\Query\TreeWalker\Paginate\LimitSubqueryWalker';
 
     /**
      * AST Tree Walker for loading the resultset by primary keys in case of distinct mode
      */
-    const TREE_WALKER_WHERE_IN = 'Knp\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker';
+    const TREE_WALKER_WHERE_IN = 'Zybreak\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker';
 
     /**
      * Query object for pagination query
@@ -82,7 +82,7 @@ class Doctrine implements Adapter
      * Set the distinct mode
      *
      * @param bool $distinct
-     * @return Knp\PaginatorBundle\Paginator\Adapter\Doctrine
+     * @return Zybreak\PaginatorBundle\Paginator\Adapter\Doctrine
      */
     public function setDistinct($distinct)
     {
@@ -96,7 +96,7 @@ class Doctrine implements Adapter
      * request parameters will be aliased by it
      *
      * @param string $alias
-     * @return Knp\PaginatorBundle\Paginator\Adapter\Doctrine
+     * @return Zybreak\PaginatorBundle\Paginator\Adapter\Doctrine
      */
     public function setAlias($alias)
     {
@@ -120,7 +120,7 @@ class Doctrine implements Adapter
      * @param Query $query - The query to paginate
      * @param integer $numRows(optional) - number of rows
      * @throws InvalidArgumentException - if query type is not supported
-     * @return Knp\PaginatorBundle\Paginator\Adapter\Doctrine
+     * @return Zybreak\PaginatorBundle\Paginator\Adapter\Doctrine
      */
     public function setQuery($query, $numRows = null)
     {

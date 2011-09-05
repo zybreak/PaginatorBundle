@@ -21,9 +21,9 @@
 /**
  * @namespace
  */
-namespace Knp\PaginatorBundle\Paginator\ScrollingStyle;
+namespace Zybreak\PaginatorBundle\Paginator\ScrollingStyle;
 
-use Knp\PaginatorBundle\Paginator\ScrollingStyle;
+use Zybreak\PaginatorBundle\Paginator\ScrollingStyle;
 
 /**
  * A Yahoo! Search-like scrolling style.  The cursor will advance to
@@ -47,7 +47,7 @@ class Sliding implements ScrollingStyle
      * @param  integer $pageRange (Optional) Page range
      * @return array
      */
-    public function getPages(\Knp\PaginatorBundle\Paginator\Paginator $paginator, $pageRange = null)
+    public function getPages(\Zybreak\PaginatorBundle\Paginator\Paginator $paginator, $pageRange = null)
     {
         if ($pageRange === null) {
             $pageRange = $paginator->getPageRange();

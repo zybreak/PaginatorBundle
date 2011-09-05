@@ -5,11 +5,11 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="knp_paginator.adapter.class">Knp\PaginatorBundle\Paginator\Adapter\Doctrine</parameter>
+        <parameter key="zybreak_paginator.adapter.class">Zybreak\PaginatorBundle\Paginator\Adapter\Doctrine</parameter>
     </parameters>
 
     <services>
-        <service id="knp_paginator.adapter" class="%knp_paginator.adapter.class%" scope="prototype">
+        <service id="zybreak_paginator.adapter" class="%zybreak_paginator.adapter.class%" scope="prototype">
             <argument type="service" id="service_container" />
         </service>
     </services>

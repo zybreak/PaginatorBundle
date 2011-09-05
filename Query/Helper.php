@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\PaginatorBundle\Query;
+namespace Zybreak\PaginatorBundle\Query;
 
 use Doctrine\ORM\Query;
 

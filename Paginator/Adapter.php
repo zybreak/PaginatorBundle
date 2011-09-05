@@ -21,7 +21,7 @@
 /**
  * @namespace
  */
-namespace Knp\PaginatorBundle\Paginator;
+namespace Zybreak\PaginatorBundle\Paginator;
 
 /**
  * Interface for pagination adapters.

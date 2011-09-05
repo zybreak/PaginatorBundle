@@ -21,7 +21,7 @@
 /**
  * @namespace
  */
-namespace Knp\PaginatorBundle\Paginator;
+namespace Zybreak\PaginatorBundle\Paginator;
 
 /**
  * @category   Zend
@@ -38,5 +38,5 @@ interface ScrollingStyle
      * @param  integer $pageRange (Optional) Page range
      * @return array
      */
-    public function getPages(\Knp\PaginatorBundle\Paginator\Paginator $paginator, $pageRange = null);
+    public function getPages(\Zybreak\PaginatorBundle\Paginator\Paginator $paginator, $pageRange = null);
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace Knp\PaginatorBundle\Templating\Helper;
+namespace Zybreak\PaginatorBundle\Templating\Helper;
 
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\RouterHelper;
 use Symfony\Component\Templating\Helper\Helper;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Knp\PaginatorBundle\Paginator\Paginator;
-use Knp\PaginatorBundle\Paginator\Doctrine as Adapter;
+use Zybreak\PaginatorBundle\Paginator\Paginator;
+use Zybreak\PaginatorBundle\Paginator\Doctrine as Adapter;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -60,7 +60,7 @@ class PaginationHelper extends Helper
      *
      * @var string
      */
-    private $template = 'KnpPaginatorBundle:Pagination:sliding.html.twig';
+    private $template = 'ZybreakPaginatorBundle:Pagination:sliding.html.twig';
 
     /**
      * Initialize pagination helper
@@ -112,7 +112,7 @@ class PaginationHelper extends Helper
             $route = $this->route;
         }
 
-        $params = get_object_vars($paginator->getPages(new \Knp\PaginatorBundle\Paginator\ScrollingStyle\Sliding()));
+        $params = get_object_vars($paginator->getPages(new \Zybreak\PaginatorBundle\Paginator\ScrollingStyle\Sliding()));
         $params['route'] = $route;
         $params['alias'] = $this->getAlias($paginator);
         $params['query'] = array_merge($this->params, $routeparams);

@@ -1,13 +1,13 @@
 <?php
 
-namespace Knp\PaginatorBundle\DependencyInjection;
+namespace Zybreak\PaginatorBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class KnpPaginatorExtension extends Extension
+class ZybreakPaginatorExtension extends Extension
 {
     /**
      * Build the extension services

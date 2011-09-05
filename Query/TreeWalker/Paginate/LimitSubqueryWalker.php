@@ -15,7 +15,7 @@
  * @license     http://hobodave.com/license.txt New BSD License
  */
 
-namespace Knp\PaginatorBundle\Query\TreeWalker\Paginate;
+namespace Zybreak\PaginatorBundle\Query\TreeWalker\Paginate;
 
 use Doctrine\ORM\Query\TreeWalkerAdapter,
     Doctrine\ORM\Query\AST\SelectStatement,

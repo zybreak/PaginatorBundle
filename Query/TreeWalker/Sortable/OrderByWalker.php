@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\PaginatorBundle\Query\TreeWalker\Sortable;
+namespace Zybreak\PaginatorBundle\Query\TreeWalker\Sortable;
 
 use Doctrine\ORM\Query\TreeWalkerAdapter,
     Doctrine\ORM\Query\AST\SelectStatement,
@@ -17,17 +17,17 @@ class OrderByWalker extends TreeWalkerAdapter
     /**
      * Sort key alias hint name
      */
-    const HINT_PAGINATOR_SORT_ALIAS = 'bundle.knp_paginator.sort.alias';
+    const HINT_PAGINATOR_SORT_ALIAS = 'bundle.zybreak_paginator.sort.alias';
 
     /**
      * Sort key field hint name
      */
-    const HINT_PAGINATOR_SORT_FIELD = 'bundle.knp_paginator.sort.field';
+    const HINT_PAGINATOR_SORT_FIELD = 'bundle.zybreak_paginator.sort.field';
 
     /**
      * Sort direction hint name
      */
-    const HINT_PAGINATOR_SORT_DIRECTION = 'bundle.knp_paginator.sort.direction';
+    const HINT_PAGINATOR_SORT_DIRECTION = 'bundle.zybreak_paginator.sort.direction';
 
     /**
      * Walks down a SelectStatement AST node, modifying it to

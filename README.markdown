@@ -23,7 +23,7 @@ variables as keys.
 
     // app/autoload.php
     $loader->registerNamespaces(array(
-        'Knp'                       => __DIR__.'/../vendor/bundles',
+        'Zybreak'                       => __DIR__.'/../vendor/bundles',
         // ...
     ));
 
@@ -35,7 +35,7 @@ variables as keys.
     {
         return array(
             // ...
-            new Knp\PaginatorBundle\KnpPaginatorBundle(),
+            new Zybreak\PaginatorBundle\ZybreakPaginatorBundle(),
             // ...
         );
     }
@@ -48,11 +48,11 @@ variables as keys.
     $dql = "SELECT a FROM VendorBlogBundle:Article a";
     $query = $em->createQuery($dql);
 
-    $adapter = $this->get('knp_paginator.adapter');
+    $adapter = $this->get('zybreak_paginator.adapter');
     $adapter->setQuery($query);
     $adapter->setDistinct(true);
 
-    $paginator = new \Knp\PaginationBundle\Paginator\Paginator($adapter);
+    $paginator = new \Zybreak\PaginationBundle\Paginator\Paginator($adapter);
     $paginator->setCurrentPageNumber($this->get('request')->query->get('page', 1));
     $paginator->setItemCountPerPage(10);
     $paginator->setPageRange(5);

@@ -15,7 +15,7 @@
  * @license     http://hobodave.com/license.txt New BSD License
  */
 
-namespace Knp\PaginatorBundle\Query\TreeWalker\Paginate;
+namespace Zybreak\PaginatorBundle\Query\TreeWalker\Paginate;
 
 use Doctrine\ORM\Query\TreeWalkerAdapter,
     Doctrine\ORM\Query\AST\SelectStatement,
@@ -43,7 +43,7 @@ class WhereInWalker extends TreeWalkerAdapter
     /**
      * ID Count hint name
      */
-    const HINT_PAGINATOR_ID_COUNT = 'bundle.knp_paginator.id.count';
+    const HINT_PAGINATOR_ID_COUNT = 'bundle.zybreak_paginator.id.count';
 
     /**
      * Primary key alias for query
