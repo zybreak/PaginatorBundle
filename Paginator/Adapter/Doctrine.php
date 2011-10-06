@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Zybreak\PaginatorBundle\Query\Helper as QueryHelper,
     Zybreak\PaginatorBundle\Query\TreeWalker\Paginate\CountWalker,
     Zybreak\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker,
+    Zybreak\PaginatorBundle\Query\TreeWalker\Sortable\OrderByWalker,
     Zybreak\PaginatorBundle\Paginator\Adapter,
     Doctrine\ORM\Query;
 
@@ -15,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
  */
 class Doctrine implements Adapter
 {
-    
+
     /**
      * AST Tree Walker for count operation
      */
@@ -30,6 +31,8 @@ class Doctrine implements Adapter
      * AST Tree Walker for loading the resultset by primary keys in case of distinct mode
      */
     const TREE_WALKER_WHERE_IN = 'Zybreak\PaginatorBundle\Query\TreeWalker\Paginate\WhereInWalker';
+
+    const TREE_WALKER_ORDER_BY = 'Zybreak\PaginatorBundle\Query\TreeWalker\Sortable\OrderByWalker';
 
     /**
      * Query object for pagination query
@@ -129,7 +132,7 @@ class Doctrine implements Adapter
 
         return $this;
     }
-    
+
     public function getQuery()
     {
         return $this->query;
@@ -190,7 +193,7 @@ class Doctrine implements Adapter
                 ->setMaxResults($itemCountPerPage);
             $ids = array_map('current', $limitSubQuery->getScalarResult());
             // create where-in query
-            
+
             die(print_r($ids, true));
             $whereInQuery = QueryHelper::cloneQuery($query);
             QueryHelper::addCustomTreeWalker($whereInQuery, self::TREE_WALKER_WHERE_IN);
@@ -209,13 +212,13 @@ class Doctrine implements Adapter
         }
         return $result;
     }
-    
+
     public function setWhereIn($ids)
     {
         if ($this->query === null) {
             throw new \UnexpectedValueException('Paginator Query must be supplied at this point');
         }
-        
+
         $whereInQuery = QueryHelper::cloneQuery($this->query);
         QueryHelper::addCustomTreeWalker($whereInQuery, self::TREE_WALKER_WHERE_IN);
         $whereInQuery->setHint(WhereInWalker::HINT_PAGINATOR_ID_COUNT, count($ids));
@@ -225,6 +228,20 @@ class Doctrine implements Adapter
         }
 
         $this->query = $whereInQuery;
+    }
+
+    public function addOrderBy($field, $direction)
+    {
+        $query = $this->getQuery();
+        $parts = explode('.', $field);
+        if (count($parts) != 2) {
+            throw new UnexpectedValueException('Invalid sort key came by request, should be example: "article.title"');
+        }
+
+        $query->setHint(OrderByWalker::HINT_PAGINATOR_SORT_ALIAS, current($parts))
+            ->setHint(OrderByWalker::HINT_PAGINATOR_SORT_DIRECTION, $direction)
+            ->setHint(OrderByWalker::HINT_PAGINATOR_SORT_FIELD, end($parts));
+        QueryHelper::addCustomTreeWalker($query, self::TREE_WALKER_ORDER_BY);
     }
 
     /**
