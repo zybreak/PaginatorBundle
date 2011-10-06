@@ -6,20 +6,11 @@
 
     <parameters>
         <parameter key="zybreak_paginator.adapter.class">Zybreak\PaginatorBundle\Paginator\Adapter\Doctrine</parameter>
-        <parameter key="zybreak_paginator.twig.extension.class">Zybreak\PaginatorBundle\Templating\PaginatorExtension</parameter>
     </parameters>
 
     <services>
         <service id="zybreak_paginator.adapter" class="%zybreak_paginator.adapter.class%" scope="prototype">
             <argument type="service" id="service_container" />
-        </service>
-
-        <service id="zybreak_paginator.twig.extension" class="%zybreak_paginator.twig.extension.class%">
-            <argument type="service" id="templating" />
-            <argument type="service" id="templating.helper.router" />
-            <argument type="service" id="translator" />
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
-            <tag name="twig.extension" />
         </service>
     </services>
 </container>

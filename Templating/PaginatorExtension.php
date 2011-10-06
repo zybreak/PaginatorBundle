@@ -2,66 +2,26 @@
 
 namespace Zybreak\PaginatorBundle\Templating;
 
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\RouterHelper;
-use Symfony\Component\Templating\EngineInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Zybreak\PaginatorBundle\Paginator\Paginator;
-use Zybreak\PaginatorBundle\Paginator\Doctrine as Adapter;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class PaginatorExtension extends \Twig_Extension
 {
+    /**
+     * Container
+     *
+     * @var ContainerInterface
+     */
+    private $container;
 
     /**
-     * Router helper for url generation
+     * Initialize pagination helper
      *
-     * @var RouterHelper
+     * @param ContainerInterface $container
      */
-    private $routerHelper;
-
-    /**
-     * Template rendering engine
-     * used for pagination control
-     * rendering
-     *
-     * @var DelegatingEngine
-     */
-    private $engine;
-
-    /**
-     * Translator
-     *
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * Request query parameters
-     *
-     * @var array
-     */
-    private $params;
-
-    /**
-     * Currently matched route
-     *
-     * @var string
-     */
-    private $route;
-
-    /**
-     * Initialize pagination extention
-     *
-     * @param EngineInterface $engine
-     * @param RouterHelper $routerHelper
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(EngineInterface $engine, RouterHelper $routerHelper, TranslatorInterface $translator)
+    public function __construct(ContainerInterface $container)
     {
-        $this->engine = $engine;
-        $this->routerHelper = $routerHelper;
-        $this->translator = $translator;
+        $this->container = $container;
     }
 
     /**
@@ -85,7 +45,7 @@ class PaginatorExtension extends \Twig_Extension
      *
      * $key example: "article.title"
      *
-     * @param Paginator $paginator
+     * @param Zend\Paginator\Paginator $paginator
      * @param string $title
      * @param string $key
      * @param array $options
@@ -95,115 +55,31 @@ class PaginatorExtension extends \Twig_Extension
      */
     public function sortable(Paginator $paginator, $title, $key, $options = array(), $params = array(), $route = null)
     {
-        $alias = $this->getAlias($paginator);
-        $options = array_merge(array(
-            'absolute' => false
-        ), $options);
-
-        if (null === $route) {
-            $route = $this->route;
-        }
-        $params = array_merge($this->params, $params);
-        $direction = isset($options[$alias.'direction']) ? $options[$alias.'direction'] : 'asc';
-
-        $sorted = isset($params[$alias.'sort']) && $params[$alias.'sort'] == $key;
-        if ($sorted) {
-            $direction = $params[$alias.'direction'];
-            $direction = (strtolower($direction) == 'asc') ? 'desc' : 'asc';
-            $class = $direction == 'asc' ? 'desc' : 'asc';
-            if (isset($options['class'])) {
-                $options['class'] .= ' ' . $class;
-            } else {
-                $options['class'] = $class;
-            }
-        } else {
-            $options['class'] = 'sortable';
-        }
-        if (is_array($title) && array_key_exists($direction, $title)) {
-            $title = $title[$direction];
-        }
-        $params = array_merge(
-            $params,
-            array($alias.'sort' => $key, $alias.'direction' => $direction)
-        );
-        return $this->buildLink($params, $route, $this->translator->trans($title), $options);
+        return $this->container->get('templating.helper.zybreak_paginator')->sortable($paginator, $title, $key, $options, $params, $route);
     }
 
     /**
      * Renders a pagination control, for a $paginator given.
+     * Optionaly $template and $style can be specified to
+     * override default from configuration.
      *
-     * @param Paginator $paginator
+     * @param Zend\Paginator\Paginator $paginator
+     * @param string $template
+     * @param array $custom - custom parameters
+     * @param array $routeparams - params for the route
+     * @param string $route
      * @return string
      */
-    public function paginate(Paginator $paginator)
+    public function paginate(Paginator $paginator, $template = null, $custom = array(), $routeparams = array(), $route = null)
     {
-        $route = $this->route;
-
-        $params = get_object_vars($paginator->getPages(new \Zybreak\PaginatorBundle\Paginator\ScrollingStyle\Sliding()));
-        $params['route'] = $route;
-        $params['alias'] = $this->getAlias($paginator);
-        $params['query'] = $this->params;
-
-        return $this->engine->render('ZybreakPaginatorBundle:Pagination:sliding.html.twig', $params);
+        return $this->container->get('templating.helper.zybreak_paginator')->paginate($paginator, $template, $custom, $routeparams, $route);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getName()
     {
         return 'paginator';
-    }
-
-    /**
-     * Build a HTML link. $options holds all link parameters
-     * like "alt, class" and so on. $title can also be an image
-     * if required.
-     *
-     * @param array $paramsß url query params
-     * @param string $route
-     * @param string $title
-     * @param array $options
-     * @return string
-     */
-    private function buildLink($params, $route, $title, $options = array())
-    {
-        $options['href'] = $this->routerHelper->generate($route, $params, $options['absolute']);
-        unset($options['absolute']);
-
-        if (!isset($options['title'])) {
-            $options['title'] = $title;
-        }
-
-        return $this->engine->render('ZybreakPaginatorBundle:Pagination:sortable_link.html.twig', array('options' => $options, 'title' => $title));
-    }
-
-    /**
-     * Get the alias of $paginator
-     *
-     * @param Paginator $paginator
-     * @return string
-     */
-    private function getAlias(Paginator $paginator)
-    {
-        $alias = '';
-        $adapter = $paginator->getAdapter();
-        if ($adapter instanceof Adapter) {
-            $alias = $adapter->getAlias();
-        }
-
-        return $alias;
-    }
-
-    public function onKernelRequest(GetResponseEvent $event)
-    {
-        if (HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
-            $request = $event->getRequest();
-
-            $this->route = $request->attributes->get('_route');
-            $this->params = array_merge($request->query->all(), $request->attributes->all());
-            foreach ($this->params as $key => $param) {
-                if (substr($key, 0, 1) == '_') {
-                    unset($this->params[$key]);
-                }
-            }
-        }
     }
 }

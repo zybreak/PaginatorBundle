@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="zybreak_paginator.templating.helper.class">Zybreak\PaginatorBundle\Templating\Helper\PaginationHelper</parameter>
+        <parameter key="zybreak_paginator.twig.extension.class">Zybreak\PaginatorBundle\Templating\PaginatorExtension</parameter>
+    </parameters>
+
+    <services>
+        <service id="zybreak_paginator.twig.extension" class="%zybreak_paginator.twig.extension.class%">
+            <argument type="service" id="service_container" />
+            <tag name="twig.extension" />
+        </service>
+        <service id="templating.helper.zybreak_paginator" class="%zybreak_paginator.templating.helper.class%">
+            <argument type="service" id="templating" />
+            <argument type="service" id="templating.helper.router" />
+            <argument type="service" id="translator" />
+            <tag name="templating.helper" alias="pagination" />
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+    </services>
+</container>
