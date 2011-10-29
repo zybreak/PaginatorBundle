@@ -18,6 +18,14 @@ conflicting parameters. Also it gets quite complicated with a twig template, sin
 variables as keys.
 
 ## Installation and configuration:
+Add to /deps file:
+    [ZybreakPaginatorBundle]
+    git=https://github.com/zybreak/PaginatorBundle.git
+    target=bundles/Zybreak/PaginatorBundle
+
+Run in console
+    php bin/vendors install
+
 
 ### Add the namespaces to your autoloader
 
