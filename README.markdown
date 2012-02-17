@@ -62,7 +62,7 @@ Run in console
     $adapter->setQuery($query);
     $adapter->setDistinct(true);
 
-    $paginator = new \Zybreak\PaginationBundle\Paginator\Paginator($adapter);
+    $paginator = new \Zybreak\PaginatorBundle\Paginator\Paginator($adapter);
     $paginator->setCurrentPageNumber($this->get('request')->query->get('page', 1));
     $paginator->setItemCountPerPage(10);
     $paginator->setPageRange(5);
